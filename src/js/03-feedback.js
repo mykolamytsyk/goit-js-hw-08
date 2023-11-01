@@ -7,30 +7,30 @@ const form = document.querySelector('.feedback-form');
 form.addEventListener('input', throttle(onInputData, 500));
 form.addEventListener('submit', onFormSubmit);
 
-let dataForm = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
-const { email, message } = form.elements;
-reloadPage();
+let dataForm = {};
 
 function onInputData(event) {
-  dataForm = { email: email.value, message: message.value };
+  dataForm[event.target.name] = event.target.value.trim();
   localStorage.setItem(STORAGE_KEY, JSON.stringify(dataForm));
 }
 
+reloadPage();
+
 function reloadPage() {
-  if (dataForm) {
-    email.value = dataForm.email || '';
-    message.value = dataForm.message || '';
+  try {
+    const savedData = localStorage.getItem(Key);
+    if (!savedData) return;
+    dataForm = JSON.parse(savedData);
+    Object.entries(dataForm).forEach(([key, val]) => {});
+  } catch ({ message }) {
+    console.log(message);
   }
 }
 
 function onFormSubmit(event) {
   event.preventDefault();
-  console.log({ email: email.value, message: message.value });
 
-  if (email.value === '' || message.value === '') {
-    return alert(`Будь ласка, заповніть всі обов'язкові поля.`);
-  }
-
+  console.log(dataForm);
   localStorage.removeItem(STORAGE_KEY);
   event.currentTarget.reset();
   dataForm = {};
