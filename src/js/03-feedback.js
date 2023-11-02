@@ -18,7 +18,7 @@ reloadPage();
 
 function reloadPage() {
   try {
-    const savedData = localStorage.getItem(Key);
+    const savedData = localStorage.getItem(STORAGE_KEY);
     if (!savedData) return;
     dataForm = JSON.parse(savedData);
     Object.entries(dataForm).forEach(([key, val]) => {});
